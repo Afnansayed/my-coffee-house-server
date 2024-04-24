@@ -91,6 +91,19 @@ async function run() {
           const result = await userCollection.insertOne(newUser);
           res.send(result);
     })
+    //update by patch
+    app.patch('/users',async(req,res)=> {
+      const updatedUser = req.body;
+      const filter = {email: updatedUser.email};
+      const options = {upsert:true};
+      const updatedDoc = {
+        $set:{
+          lastSignIn: updatedUser.lastSignIn,
+        }
+      }
+      const result = await userCollection.updateOne(filter,updatedDoc,options);
+      res.send(result)
+    })
     //delete
     app.delete('/users/:id',async(req,res)=>{
           const id = req.params.id;
